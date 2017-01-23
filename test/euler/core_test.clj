@@ -2,6 +2,8 @@
   (:require [clojure.test :refer :all]
             [euler.core :refer :all]))
 
-(deftest a-test
+(deftest eulers-tests
   (testing "Euler problem #1"
-    (is (= (euler-1) 233168))))
+    (is (= (euler-1) 233168)))
+  (testing "Euler problem #2"
+    (is (= (euler-2) 4613732))))
