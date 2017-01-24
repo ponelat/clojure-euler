@@ -27,6 +27,44 @@
 
    (more-fibs '(1 1))))
 
+(defn filter-out-first
+  [coll]
+  (let [factor (first coll)]
+    (filter (fn [x] (not= (mod x factor) 0)) coll))) 
+
+(defn reduce-coll-to-highest-prime-factor
+  [coll]
+  (if (= (count coll) 1)
+    (first coll)
+    (reduce-coll-to-highest-prime-factor (filter-out-first coll))))
+
+(defn is-prime
+  [primes x]
+  (not (some (fn [prime] (= (mod x prime) 0)) primes)))
+
+(defn more-primes
+  ([] '(2))
+  ([primes] 
+   (if (<= (first primes) 2)
+    '(3 2)
+     (more-primes primes (+ 2 (first primes)))))
+  ([primes x]
+   (if (is-prime primes x)
+      (conj primes x)
+      (more-primes primes (+ 2 x)))))
+
+(defn factorize
+  ([x] (factorize (more-primes) x))
+  ([primes x] (factorize primes x '()))
+  ([primes x factors]
+   (if (= x 1)
+     factors
+     (let [next-prime (first primes)]
+      (if (= (mod x next-prime) 0)
+       (factorize primes (/ x next-prime) (conj factors next-prime))
+       (factorize (more-primes primes) x factors))))))
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -39,4 +77,9 @@
   "Even Fibonacci numbers"
   []
   (reduce + (filter odd? (fibs-up-to 4000000))))
+
+(defn euler-3
+  "Highest prime factor of x"
+  []
+  (first (factorize 600851475143)))
   
