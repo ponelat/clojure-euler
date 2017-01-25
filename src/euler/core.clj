@@ -64,6 +64,37 @@
        (factorize primes (/ x next-prime) (conj factors next-prime))
        (factorize (more-primes primes) x factors))))))
 
+(defn less-than
+  [x]
+  (fn [y] (< y x)))
+
+(def three-digit-numbers (drop-while (less-than 100) (range 1000)))
+
+(defn build-matrix
+  [coll-a coll-b f]
+  (letfn [
+          (make-col [f x coll]
+           (map (partial f x) coll))
+          (make-matrix [coll-a coll-b f]
+           (map (fn [x] (make-col f x coll-a)) coll-b))]
+    (make-matrix coll-a coll-b f)))
+
+(defn flat-set
+  [matrix]
+  (set (flatten matrix)))
+
+(def products-of-three-digits (flat-set (build-matrix three-digit-numbers three-digit-numbers *)))  
+
+(defn is-palindrome
+  [x]
+  (let [strx (str x)]
+   (loop [start 0 end (- (count strx) 1)]
+    (if (>= start end) true
+     (if (= (nth strx start) (nth strx end)) 
+      (recur (+ start 1) (- end 1))
+      false)))))
+
+(def palindromes-three-digit-factors (filter is-palindrome products-of-three-digits))
 
 
 
@@ -82,4 +113,9 @@
   "Highest prime factor of x"
   []
   (first (factorize 600851475143)))
+
+(defn euler-4
+  "Highest palindrome number with two, three-digit factors"
+  []
+  (first (reverse (sort palindromes-three-digit-factors))))
   
