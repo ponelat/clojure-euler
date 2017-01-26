@@ -57,7 +57,7 @@
   ([x] (factorize (more-primes) x))
   ([primes x] (factorize primes x '()))
   ([primes x factors]
-   (if (= x 1)
+   (if (<= x 1)
      factors
      (let [next-prime (first primes)]
       (if (= (mod x next-prime) 0)
@@ -96,7 +96,18 @@
 
 (def palindromes-three-digit-factors (filter is-palindrome products-of-three-digits))
 
+(defn filter-by
+  ([coll] coll)
+  ([x coll]
+   (filter #(= x %) coll))) 
 
+(defn build-number
+  "Builds a number from a map, where the key is the factor and the value is the power"
+  [m]
+  (reduce 
+    (fn [acc [k v]] (* acc (int (Math/pow k v))))
+    1
+    m))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn euler-1 
@@ -118,4 +129,16 @@
   "Highest palindrome number with two, three-digit factors"
   []
   (first (reverse (sort palindromes-three-digit-factors))))
+
+(defn euler-5
+  "Smallest number, evenly divisible by the numbers 1-20"
+  []
+  (let [ factors-seq (map factorize (range 20)) 
+         map-of-factors 
+         (reduce 
+           (fn [a b] (merge-with #(max %1 %2) a (frequencies b))) 
+           (frequencies (first factors-seq))
+           (rest factors-seq))]
+   (build-number map-of-factors)))
+
   

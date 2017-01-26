@@ -11,3 +11,5 @@
     (is (= (euler-3) 6857)))
   (testing "Euler problem #4"
     (is (= (euler-4) 906690))))
+  (testing "Euler problem #5"
+    (is (= (euler-5) 232792560))))
