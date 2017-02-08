@@ -109,6 +109,17 @@
     1
     m))
 
+(def square #(* % %))
+
+(defn sum-of-squares
+  [limit]
+  (apply + (map square (range (+ 1 limit)))))
+
+(defn square-of-sum
+  [limit]
+  (square (apply + (range (+ 1 limit)))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn euler-1 
   "The sum of all multiples of 5 and 3, under 1000"
@@ -141,4 +152,10 @@
            (rest factors-seq))]
    (build-number map-of-factors)))
 
-  
+(defn euler-6
+  "difference between sum of squares and square of sums, for first 100 natural numbers"
+  []
+  (- (square-of-sum 100N) (sum-of-squares 100N)))
+
+
+
