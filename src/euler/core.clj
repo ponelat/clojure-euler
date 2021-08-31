@@ -6,8 +6,8 @@
 
 (defn sum-of-5s-and-3s-below
   [limit]
-  (reduce + (filter  
-              (fn [x] (or (= (mod x 5) 0) 
+  (reduce + (filter
+              (fn [x] (or (= (mod x 5) 0)
                           (= (mod x 3) 0)))
               (range limit))))
 
@@ -19,18 +19,18 @@
         [coll]
         (conj coll (+ (first coll) (second coll))))
 
-      (more-fibs 
+      (more-fibs
         [coll]
-        (if (> (first coll) x) 
+        (if (> (first coll) x)
           (rest coll)
-          (more-fibs (next-fib coll))))] 
+          (more-fibs (next-fib coll))))]
 
    (more-fibs '(1 1))))
 
 (defn filter-out-first
   [coll]
   (let [factor (first coll)]
-    (filter (fn [x] (not= (mod x factor) 0)) coll))) 
+    (filter (fn [x] (not= (mod x factor) 0)) coll)))
 
 (defn reduce-coll-to-highest-prime-factor
   [coll]
@@ -44,7 +44,7 @@
 
 (defn more-primes
   ([] '(2))
-  ([primes] 
+  ([primes]
    (if (<= (first primes) 2)
     '(3 2)
      (more-primes primes (+ 2 (first primes)))))
@@ -52,6 +52,12 @@
    (if (is-prime primes x)
       (conj primes x)
       (more-primes primes (+ 2 x)))))
+
+(defn primes
+  "Lazy list of primes."
+  []
+  100)
+
 
 (defn factorize
   ([x] (factorize (more-primes) x))
@@ -83,14 +89,14 @@
   [matrix]
   (set (flatten matrix)))
 
-(def products-of-three-digits (flat-set (build-matrix three-digit-numbers three-digit-numbers *)))  
+(def products-of-three-digits (flat-set (build-matrix three-digit-numbers three-digit-numbers *)))
 
 (defn is-palindrome
   [x]
   (let [strx (str x)]
    (loop [start 0 end (- (count strx) 1)]
     (if (>= start end) true
-     (if (= (nth strx start) (nth strx end)) 
+     (if (= (nth strx start) (nth strx end))
       (recur (+ start 1) (- end 1))
       false)))))
 
@@ -99,12 +105,12 @@
 (defn filter-by
   ([coll] coll)
   ([x coll]
-   (filter #(= x %) coll))) 
+   (filter #(= x %) coll)))
 
 (defn build-number
   "Builds a number from a map, where the key is the factor and the value is the power"
   [m]
-  (reduce 
+  (reduce
     (fn [acc [k v]] (* acc (int (Math/pow k v))))
     1
     m))
@@ -121,9 +127,9 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn euler-1 
+(defn euler-1
   "The sum of all multiples of 5 and 3, under 1000"
-  [] 
+  []
   (sum-of-5s-and-3s-below 1000))
 
 (defn euler-2
@@ -144,10 +150,10 @@
 (defn euler-5
   "Smallest number, evenly divisible by the numbers 1-20"
   []
-  (let [ factors-seq (map factorize (range 20)) 
-         map-of-factors 
-         (reduce 
-           (fn [a b] (merge-with #(max %1 %2) a (frequencies b))) 
+  (let [ factors-seq (map factorize (range 20))
+         map-of-factors
+         (reduce
+           (fn [a b] (merge-with #(max %1 %2) a (frequencies b)))
            (frequencies (first factors-seq))
            (rest factors-seq))]
    (build-number map-of-factors)))
@@ -157,5 +163,7 @@
   []
   (- (square-of-sum 100N) (sum-of-squares 100N)))
 
-
-
+;; (defn euler-7
+;;   "The 10001st prime."
+;;   []
+;;   (nth (primes) 10001))
